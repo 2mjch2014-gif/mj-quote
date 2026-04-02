@@ -1,844 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MJ Roof Master – Free Estimate</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --brand:     #c46a1a;
-    --brand-dk:  #a35514;
-    --dark:      #111827;
-    --dark2:     #1f2937;
-    --mid:       #374151;
-    --muted:     #6b7280;
-    --light:     #f9fafb;
-    --border:    #e5e7eb;
-    --white:     #ffffff;
-    --success:   #16a34a;
-    --radius:    10px;
-    --shadow:    0 4px 24px rgba(0,0,0,0.08);
-  }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: #f3f4f6;
-    color: var(--dark);
-    min-height: 100vh;
-    padding: 2rem 1rem 3rem;
-  }
-
-  .wrapper {
-    max-width: 580px;
-    margin: 0 auto;
-  }
-
-  /* ── HEADER ── */
-  .header {
-    background: var(--dark);
-    border-radius: var(--radius) var(--radius) 0 0;
-    padding: 2rem 2rem 1.5rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .header::after {
-    content: '';
-    position: absolute;
-    right: -30px; top: -30px;
-    width: 160px; height: 160px;
-    background: rgba(196,106,26,0.15);
-    border-radius: 50%;
-  }
-  .header-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--brand);
-    color: #fff;
-    font-family: 'Oswald', sans-serif;
-    font-size: 11px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 4px;
-    margin-bottom: 12px;
-  }
-  .header-title {
-    font-family: 'Oswald', sans-serif;
-    font-size: 28px;
-    font-weight: 600;
-    color: #fff;
-    line-height: 1.1;
-    margin-bottom: 6px;
-    position: relative; z-index: 1;
-  }
-  .header-sub {
-    font-size: 13px;
-    color: rgba(255,255,255,0.55);
-    position: relative; z-index: 1;
-    margin-bottom: 1.5rem;
-  }
-
-  /* ── STEP TRACK ── */
-  .track {
-    display: flex;
-    align-items: center;
-    position: relative; z-index: 1;
-  }
-  .track-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    flex: none;
-  }
-  .track-dot {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.2);
-    background: transparent;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 500;
-    color: rgba(255,255,255,0.35);
-    transition: all .3s;
-  }
-  .track-step.active .track-dot  { border-color: var(--brand); background: var(--brand); color: #fff; }
-  .track-step.done   .track-dot  { border-color: var(--brand); background: rgba(196,106,26,0.25); color: var(--brand); }
-  .track-label {
-    font-size: 11px;
-    color: rgba(255,255,255,0.3);
-    white-space: nowrap;
-    transition: color .3s;
-  }
-  .track-step.active .track-label,
-  .track-step.done   .track-label { color: rgba(255,255,255,0.7); }
-  .track-line {
-    flex: 1;
-    height: 1px;
-    background: rgba(255,255,255,0.12);
-    margin: 0 6px;
-    margin-bottom: 18px;
-    transition: background .3s;
-  }
-  .track-line.done { background: var(--brand); }
-
-  /* ── CARD ── */
-  .card {
-    background: var(--white);
-    border-radius: 0 0 var(--radius) var(--radius);
-    padding: 2rem;
-    box-shadow: var(--shadow);
-  }
-  .card.hidden { display: none; }
-
-  /* ── FORM ELEMENTS ── */
-  .field { margin-bottom: 18px; }
-  .field label {
-    display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--mid);
-    margin-bottom: 6px;
-  }
-  .field label span { color: var(--brand); }
-
-  input[type=text],
-  input[type=email],
-  input[type=tel],
-  select,
-  textarea {
-    width: 100%;
-    padding: 11px 14px;
-    font-size: 15px;
-    font-family: 'DM Sans', sans-serif;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    background: var(--light);
-    color: var(--dark);
-    outline: none;
-    transition: border-color .2s, box-shadow .2s;
-    appearance: none;
-  }
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--brand);
-    box-shadow: 0 0 0 3px rgba(196,106,26,0.12);
-    background: #fff;
-  }
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .field-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-
-  textarea { resize: vertical; min-height: 80px; }
-
-  .select-wrap { position: relative; }
-  .select-wrap::after {
-    content: '▾';
-    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-    color: var(--muted); pointer-events: none; font-size: 13px;
-  }
-
-  /* ── CHECKBOXES ── */
-  .checks { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
-  .check-item {
-    display: flex; align-items: center; gap: 8px;
-    padding: 8px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    color: var(--mid);
-    transition: all .2s;
-    user-select: none;
-    background: var(--light);
-  }
-  .check-item input { display: none; }
-  .check-item.checked {
-    border-color: var(--brand);
-    background: rgba(196,106,26,0.06);
-    color: var(--brand);
-    font-weight: 500;
-  }
-  .check-box {
-    width: 16px; height: 16px;
-    border: 2px solid var(--border);
-    border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px;
-    transition: all .2s;
-    flex-shrink: 0;
-  }
-  .check-item.checked .check-box {
-    background: var(--brand);
-    border-color: var(--brand);
-    color: #fff;
-  }
-
-  /* ── BUTTONS ── */
-  .btn-primary {
-    width: 100%;
-    padding: 14px;
-    background: var(--brand);
-    color: #fff;
-    font-family: 'Oswald', sans-serif;
-    font-size: 17px;
-    letter-spacing: 0.5px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background .2s, transform .1s;
-    margin-top: 8px;
-  }
-  .btn-primary:hover { background: var(--brand-dk); }
-  .btn-primary:active { transform: scale(0.99); }
-
-  .btn-back {
-    width: 100%;
-    padding: 11px;
-    background: transparent;
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 8px;
-    transition: all .2s;
-  }
-  .btn-back:hover { border-color: var(--brand); color: var(--brand); }
-
-  /* ── NOTICE ── */
-  .notice {
-    display: flex; gap: 10px;
-    background: #fef3e2;
-    border-left: 3px solid var(--brand);
-    border-radius: 6px;
-    padding: 12px 14px;
-    font-size: 13px;
-    color: #7c4e10;
-    line-height: 1.55;
-    margin-bottom: 20px;
-  }
-  .notice-icon { flex-shrink: 0; font-size: 15px; margin-top: 1px; }
-
-  /* ── ERROR ── */
-  .err {
-    font-size: 12px;
-    color: #dc2626;
-    margin-top: 5px;
-    display: none;
-  }
-
-  /* ── LOADING ── */
-  .loading-wrap {
-    text-align: center;
-    padding: 3rem 1rem;
-  }
-  .spinner {
-    width: 40px; height: 40px;
-    border: 3px solid var(--border);
-    border-top-color: var(--brand);
-    border-radius: 50%;
-    animation: spin .8s linear infinite;
-    margin: 0 auto 1rem;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 15px; color: var(--muted); }
-  .loading-sub  { font-size: 12px; color: #9ca3af; margin-top: 6px; }
-
-  /* ── QUOTE RESULT ── */
-  .quote-hero {
-    text-align: center;
-    padding: 1rem 0 1.5rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 1.25rem;
-  }
-  .quote-price {
-    font-family: 'Oswald', sans-serif;
-    font-size: 48px;
-    font-weight: 600;
-    color: var(--brand);
-    line-height: 1;
-  }
-  .quote-range {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-  .quote-address {
-    font-size: 13px;
-    color: var(--mid);
-    margin-top: 6px;
-    font-weight: 500;
-  }
-
-  .detail-rows { margin-bottom: 1.25rem; }
-  .detail-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 9px 0;
-    border-bottom: 1px solid #f3f4f6;
-    font-size: 14px;
-  }
-  .detail-row:last-child { border-bottom: none; }
-  .detail-row .dk { color: var(--muted); }
-  .detail-row .vl { font-weight: 500; color: var(--dark); }
-  .detail-row .vl.accent { color: var(--brand); }
-
-  .notify-box {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    border-radius: 8px;
-    padding: 14px 16px;
-    font-size: 13px;
-    color: #15803d;
-    line-height: 1.6;
-    margin-bottom: 1.25rem;
-  }
-  .notify-box strong { display: block; margin-bottom: 2px; font-size: 14px; }
-
-  /* ── SUCCESS ── */
-  .success-wrap {
-    text-align: center;
-    padding: 2rem 0 1rem;
-  }
-  .success-circle {
-    width: 64px; height: 64px;
-    background: var(--brand);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 26px;
-    margin: 0 auto 1.25rem;
-    color: #fff;
-  }
-  .success-title {
-    font-family: 'Oswald', sans-serif;
-    font-size: 24px;
-    color: var(--dark);
-    margin-bottom: 8px;
-  }
-  .success-body {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.7;
-    max-width: 400px;
-    margin: 0 auto 1.5rem;
-  }
-  .trust-row {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-  }
-  .trust-item {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--muted);
-  }
-  .trust-dot {
-    width: 8px; height: 8px;
-    background: var(--brand);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  /* ── FOOTER ── */
-  .footer {
-    text-align: center;
-    margin-top: 1.25rem;
-    font-size: 12px;
-    color: #9ca3af;
-  }
-  .footer a { color: var(--brand); text-decoration: none; }
-
-  @media (max-width: 480px) {
-    body { padding: 0; }
-    .header { border-radius: 0; }
-    .card { border-radius: 0; }
-    .field-row, .field-row3 { grid-template-columns: 1fr; }
-  }
-</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MJ Roof Master | Professional Roofing Installation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f5f5; color: #222; }
+    .top-bar { background: #2a7a6e; text-align: center; padding: 12px 20px; }
+    .top-bar a { color: #fff; font-size: 16px; font-weight: 700; text-decoration: none; }
+    header { background: #fff; padding: 20px 5%; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8e8e8; }
+    .logo { text-decoration: none; }
+    .logo-box { background: #2a7a6e; padding: 10px 20px; border-radius: 4px; display: inline-block; }
+    .logo-box .logo-top { color: #fff; font-size: 28px; font-weight: 900; line-height: 1; }
+    .logo-box .logo-bottom { color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+    .header-right { color: #444; font-size: 16px; }
+    nav { background: #fff; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
+    .nav-inner { display: flex; max-width: 900px; margin: 0 auto; border-left: 1px solid #e0e0e0; }
+    nav a { flex: 1; text-align: center; padding: 14px 10px; font-size: 15px; color: #333; text-decoration: none; border-right: 1px solid #e0e0e0; }
+    nav a:hover { background: #f0f9f7; color: #2a7a6e; }
+    .main-wrap { max-width: 1100px; margin: 40px auto; padding: 0 5%; display: grid; grid-template-columns: 1fr 420px; gap: 50px; }
+    .hero-text .subtitle { font-style: italic; color: #555; font-size: 16px; margin-bottom: 8px; }
+    .hero-text h1 { font-size: clamp(28px, 3.5vw, 42px); font-weight: 800; color: #1a1a1a; margin-bottom: 16px; line-height: 1.15; }
+    .hero-text .desc { font-size: 15px; color: #555; line-height: 1.65; margin-bottom: 28px; }
+    .why-title { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; }
+    .bullet-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 36px; }
+    .bullet-cols li { list-style: none; font-size: 14.5px; color: #333; padding-left: 18px; position: relative; line-height: 1.5; }
+    .bullet-cols li::before { content: 'o'; position: absolute; left: 0; color: #2a7a6e; font-weight: 700; }
+    .hero-photo-wrap { border-radius: 6px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.1); background: #c8ddd9; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; }
+    .photo-placeholder { text-align: center; color: #5a9e96; padding: 40px 20px; }
+    .photo-placeholder .ph-icon { font-size: 64px; margin-bottom: 12px; display: block; }
+    .quote-section { max-width: 1100px; margin: 0 auto 50px; padding: 0 5%; }
+    .quote-card { background: #fff; border-radius: 6px; box-shadow: 0 2px 14px rgba(0,0,0,0.08); display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+    .quote-left { padding: 36px; border-left: 5px solid #f5c518; }
+    .quote-left h2 { font-size: 26px; font-weight: 800; color: #1a1a1a; margin-bottom: 10px; }
+    .quote-left p { font-size: 14px; color: #666; }
+    .quote-right { padding: 36px; background: #fafafa; display: flex; flex-direction: column; gap: 12px; }
+    .quote-right label { font-size: 14px; font-weight: 600; color: #333; }
+    .quote-right input { width: 100%; border: 1px solid #ccc; border-radius: 4px; padding: 12px 14px; font-size: 15px; outline: none; }
+    .btn-estimate { width: 100%; background: #f5c518; color: #1a1a1a; border: none; border-radius: 4px; padding: 15px; font-size: 15px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+    .services-strip { background: #2a7a6e; padding: 50px 5%; }
+    .services-strip h2 { text-align: center; color: #fff; font-size: 26px; font-weight: 700; margin-bottom: 30px; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; max-width: 1000px; margin: 0 auto; }
+    .svc-card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 24px 16px; text-align: center; color: #fff; }
+    .svc-card .icon { font-size: 32px; margin-bottom: 10px; display: block; }
+    .svc-card h3 { font-size: 15px; font-weight: 700; }
+    .trust-bar { background: #fff; padding: 30px 5%; display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+    .trust-item { text-align: center; }
+    .trust-item .t-num { font-size: 30px; font-weight: 900; color: #2a7a6e; }
+    .trust-item .t-label { font-size: 13px; color: #666; margin-top: 4px; }
+    footer { background: #1a1a1a; color: rgba(255,255,255,0.5); padding: 24px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 13px; }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    footer a:hover { color: #f5c518; }
+    .footer-links { display: flex; gap: 18px; }
+    @media (max-width: 768px) { .main-wrap { grid-template-columns: 1fr; } .quote-card { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-badge">⚡ Free Estimate</div>
-    <div class="header-title">Get Your Roof Quote<br>in 2 Minutes</div>
-    <div class="header-sub">No obligation · No sales pressure · Greater Houston & DFW</div>
-
-    <div class="track">
-      <div class="track-step active" id="ts1">
-        <div class="track-dot">1</div>
-        <div class="track-label">Your info</div>
-      </div>
-      <div class="track-line" id="tl1"></div>
-      <div class="track-step" id="ts2">
-        <div class="track-dot">2</div>
-        <div class="track-label">Roof details</div>
-      </div>
-      <div class="track-line" id="tl2"></div>
-      <div class="track-step" id="ts3">
-        <div class="track-dot">3</div>
-        <div class="track-label">Your quote</div>
-      </div>
-    </div>
+<div class="top-bar"><a href="tel:8328458465">Call (832) 845-8465 - Free Estimate!</a></div>
+<header>
+  <a href="#" class="logo"><div class="logo-box"><div class="logo-top">MJ ROOF</div><div class="logo-bottom">MASTER</div></div></a>
+  <div class="header-right">Greater Houston &amp; DFW</div>
+</header>
+<nav><div class="nav-inner"><a href="#">Home</a><a href="#quote">Request Service</a><a href="#quote">Request a Quote</a><a href="#contact">Contact Us</a></div></nav>
+<div class="main-wrap">
+  <div class="hero-text">
+    <p class="subtitle">High Quality, Affordable</p>
+    <h1>Roof Installation in<br>Greater Houston &amp; DFW</h1>
+    <p class="desc">Need a new roof? Our trusted roofing professionals deliver expert installation with quality materials and a workmanship warranty - on time and on budget.</p>
+    <h2 class="why-title">Why Our Pros?</h2>
+    <ul class="bullet-cols">
+      <li>New Roof Installation</li><li>All Roofing Materials</li>
+      <li>Full Roof Replacement</li><li>High Customer Satisfaction</li>
+      <li>Flat &amp; Pitched Roofs</li><li>Residential &amp; Commercial</li>
+      <li>Leak Detection &amp; Repair</li><li>Professional Service</li>
+    </ul>
   </div>
-
-  <!-- STEP 1: Contact Info -->
-  <div class="card" id="card1">
-    <div class="notice">
-      <div class="notice-icon">🛰️</div>
-      <div>We use <strong>satellite data</strong> to measure your roof — no visit needed for an estimate. Our team will contact you within <strong>24 hours</strong> to confirm details.</div>
-    </div>
-
-    <div class="field">
-      <label>Full name <span>*</span></label>
-      <input type="text" id="f-name" placeholder="Jane Smith">
-      <div class="err" id="e-name">Please enter your name.</div>
-    </div>
-
-    <div class="field-row">
-      <div class="field">
-        <label>Phone <span>*</span></label>
-        <input type="tel" id="f-phone" placeholder="(832) 000-0000">
-        <div class="err" id="e-phone">Please enter your phone.</div>
-      </div>
-      <div class="field">
-        <label>Email <span>*</span></label>
-        <input type="email" id="f-email" placeholder="you@email.com">
-        <div class="err" id="e-email">Valid email required.</div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Property address <span>*</span></label>
-      <input type="text" id="f-addr" placeholder="1234 Oak Street">
-      <div class="err" id="e-addr">Please enter the property address.</div>
-    </div>
-
-    <div class="field-row3">
-      <div class="field" style="margin-bottom:0">
-        <label>City <span>*</span></label>
-        <input type="text" id="f-city" placeholder="Houston">
-        <div class="err" id="e-city">Required.</div>
-      </div>
-      <div class="field" style="margin-bottom:0">
-        <label>State</label>
-        <div class="select-wrap">
-          <select id="f-state">
-            <option>TX</option>
-          </select>
-        </div>
-      </div>
-      <div class="field" style="margin-bottom:0">
-        <label>ZIP <span>*</span></label>
-        <input type="text" id="f-zip" placeholder="77001" maxlength="5">
-        <div class="err" id="e-zip">Required.</div>
-      </div>
-    </div>
-
-    <button class="btn-primary" onclick="goStep2()">Continue — Roof Details →</button>
-  </div>
-
-  <!-- STEP 2: Roof Details -->
-  <div class="card hidden" id="card2">
-    <div class="field">
-      <label>Roof type <span>*</span></label>
-      <div class="select-wrap">
-        <select id="f-rooftype">
-          <option value="shingle">Shingle (Asphalt) — Residential</option>
-          <option value="tpo">TPO Flat — Commercial / Low-slope</option>
-          <option value="metal">Metal Roof</option>
-          <option value="unknown">Not sure</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="field-row">
-      <div class="field">
-        <label>Estimated roof age</label>
-        <div class="select-wrap">
-          <select id="f-age">
-            <option value="u10">Under 10 years</option>
-            <option value="10-20">10–20 years</option>
-            <option value="o20">Over 20 years</option>
-            <option value="unk">Not sure</option>
-          </select>
-        </div>
-      </div>
-      <div class="field">
-        <label>Home stories</label>
-        <div class="select-wrap">
-          <select id="f-stories">
-            <option value="1">1 story</option>
-            <option value="2">2 stories</option>
-            <option value="3+">3+ stories</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Reason for inquiry <span>*</span></label>
-      <div class="select-wrap">
-        <select id="f-reason">
-          <option value="replace">Full roof replacement</option>
-          <option value="repair">Repair / leak fix</option>
-          <option value="storm">Storm / hail / insurance claim</option>
-          <option value="inspect">Inspection only</option>
-          <option value="new">New construction</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Add-on services interested in</label>
-      <div class="checks">
-        <label class="check-item" onclick="toggle(this)">
-          <input type="checkbox" id="add-ins">
-          <div class="check-box"></div>
-          Attic insulation
-        </label>
-        <label class="check-item" onclick="toggle(this)">
-          <input type="checkbox" id="add-gut">
-          <div class="check-box"></div>
-          Gutters / downspouts
-        </label>
-        <label class="check-item" onclick="toggle(this)">
-          <input type="checkbox" id="add-fin">
-          <div class="check-box"></div>
-          Financing ($200/mo)
-        </label>
-        <label class="check-item" onclick="toggle(this)">
-          <input type="checkbox" id="add-sid">
-          <div class="check-box"></div>
-          Siding / Hardie plank
-        </label>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Additional notes</label>
-      <textarea id="f-notes" placeholder="Describe any damage, recent storms, or specific concerns…"></textarea>
-    </div>
-
-    <button class="btn-primary" onclick="goStep3()">Get My Estimate →</button>
-    <button class="btn-back" onclick="backTo(1)">← Back</button>
-  </div>
-
-  <!-- LOADING -->
-  <div class="card hidden" id="card-loading">
-    <div class="loading-wrap">
-      <div class="spinner"></div>
-      <div class="loading-text">Measuring your roof via satellite…</div>
-      <div class="loading-sub">Calculating material + labor estimate</div>
-    </div>
-  </div>
-
-  <!-- STEP 3: Quote Result -->
-  <div class="card hidden" id="card3">
-    <div class="quote-hero">
-      <div class="quote-price" id="r-price">$0</div>
-      <div class="quote-range" id="r-range">Estimated total · material + labor</div>
-      <div class="quote-address" id="r-address">—</div>
-    </div>
-
-    <div class="detail-rows">
-      <div class="detail-row">
-        <span class="dk">Roof area (estimated)</span>
-        <span class="vl" id="r-sqft">—</span>
-      </div>
-      <div class="detail-row">
-        <span class="dk">Roof squares</span>
-        <span class="vl" id="r-sq">—</span>
-      </div>
-      <div class="detail-row">
-        <span class="dk">Roof type</span>
-        <span class="vl" id="r-type">—</span>
-      </div>
-      <div class="detail-row">
-        <span class="dk">Workmanship warranty</span>
-        <span class="vl accent">5-Year (upgradeable to 10-Year)</span>
-      </div>
-      <div class="detail-row">
-        <span class="dk">Manufacturer warranty</span>
-        <span class="vl">30-Year Limited Lifetime</span>
-      </div>
-      <div class="detail-row" id="r-addon-row" style="display:none">
-        <span class="dk">Add-ons requested</span>
-        <span class="vl" id="r-addons">—</span>
-      </div>
-      <div class="detail-row" id="r-fin-row" style="display:none">
-        <span class="dk">Financing</span>
-        <span class="vl accent">~$200/mo available</span>
-      </div>
-    </div>
-
-    <div class="notify-box">
-      <strong>✅ Request received!</strong>
-      Our team will call <span id="r-phone">you</span> within <strong>24 hours</strong> to confirm your quote and schedule a free on-site inspection. A copy has been sent to <span id="r-email-out">your email</span>.
-    </div>
-
-    <button class="btn-primary" onclick="callUs()">☎ Call Now: 832-845-8465</button>
-    <button class="btn-back" onclick="restart()" style="margin-top:8px">Submit another request</button>
-
-    <div class="trust-row">
-      <div class="trust-item"><div class="trust-dot"></div>Greater Houston & DFW</div>
-      <div class="trust-item"><div class="trust-dot"></div>Licensed & Insured</div>
-      <div class="trust-item"><div class="trust-dot"></div>5★ Google Reviews</div>
-    </div>
-  </div>
-
-  <div class="footer">
-    <a href="https://www.mjroofmaster.com" target="_blank">mjroofmaster.com</a> &nbsp;·&nbsp; 832-845-8465 &nbsp;·&nbsp; 2mjch2014@gmail.com
-  </div>
-
+  <div class="hero-photo-wrap"><div class="photo-placeholder"><span class="ph-icon">H</span><p>Add your roofing photo here</p></div></div>
 </div>
-
-<!-- ═══════════════════════════════════════════════ SCRIPT -->
-<script>
-  // ── YOUR EMAIL — notifications go here ──────────────────
-  const NOTIFY_EMAIL = '2mjch2014@gmail.com';
-
-  // FormSubmit endpoint (free, no backend needed)
-  // After first submission FormSubmit sends a confirmation to NOTIFY_EMAIL
-  const FORMSUBMIT_URL = 'https://formsubmit.co/' + NOTIFY_EMAIL;
-
-  // ── Rates per square ($100 sq ft) ───────────────────────
-  const RATES = {
-    shingle: { low: 380, mid: 480, high: 560 },
-    tpo:     { low: 420, mid: 520, high: 640 },
-    metal:   { low: 650, mid: 800, high: 950 },
-    unknown: { low: 380, mid: 490, high: 580 }
-  };
-  const ADDON_PRICES = { ins: 900, gut: 1400, sid: 2000 };
-
-  let D = {}; // collected form data
-
-  // ── Step navigation ──────────────────────────────────────
-  function setStep(n) {
-    [1,2,3].forEach(i => {
-      const s = document.getElementById('ts'+i);
-      s.className = 'track-step' + (i<n?' done':i===n?' active':'');
-    });
-    [1,2].forEach(i => {
-      const l = document.getElementById('tl'+i);
-      l.className = 'track-line' + (i<n?' done':'');
-    });
-  }
-
-  function showCard(id) {
-    ['card1','card2','card-loading','card3'].forEach(c =>
-      document.getElementById(c).classList.add('hidden')
-    );
-    document.getElementById(id).classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // ── Validation helpers ───────────────────────────────────
-  function req(id, errId, check) {
-    const v = document.getElementById(id).value.trim();
-    const ok = check ? check(v) : v.length > 0;
-    document.getElementById(errId).style.display = ok ? 'none' : 'block';
-    return ok;
-  }
-
-  const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-
-  // ── Step 1 → 2 ───────────────────────────────────────────
-  function goStep2() {
-    const ok = [
-      req('f-name',  'e-name'),
-      req('f-phone', 'e-phone'),
-      req('f-email', 'e-email', isEmail),
-      req('f-addr',  'e-addr'),
-      req('f-city',  'e-city'),
-      req('f-zip',   'e-zip', v => /^\d{5}$/.test(v))
-    ].every(Boolean);
-    if (!ok) return;
-
-    D.name  = document.getElementById('f-name').value.trim();
-    D.phone = document.getElementById('f-phone').value.trim();
-    D.email = document.getElementById('f-email').value.trim();
-    D.addr  = document.getElementById('f-addr').value.trim();
-    D.city  = document.getElementById('f-city').value.trim();
-    D.state = document.getElementById('f-state').value;
-    D.zip   = document.getElementById('f-zip').value.trim();
-
-    setStep(2); showCard('card2');
-  }
-
-  // ── Step 2 → 3 ───────────────────────────────────────────
-  function goStep3() {
-    D.rooftype = document.getElementById('f-rooftype').value;
-    D.age      = document.getElementById('f-age').value;
-    D.stories  = document.getElementById('f-stories').value;
-    D.reason   = document.getElementById('f-reason').value;
-    D.ins      = document.getElementById('add-ins').checked;
-    D.gut      = document.getElementById('add-gut').checked;
-    D.fin      = document.getElementById('add-fin').checked;
-    D.sid      = document.getElementById('add-sid').checked;
-    D.notes    = document.getElementById('f-notes').value.trim();
-
-    setStep(3); showCard('card-loading');
-    setTimeout(calcAndDisplay, 2200);
-  }
-
-  // ── Estimate calculation ─────────────────────────────────
-  function calcAndDisplay() {
-    // Deterministic but varied sq ft based on address
-    const seed = D.zip.split('').reduce((a,c)=>a+parseInt(c)||a, 0) +
-                 D.addr.length * 7 + D.city.length * 3;
-    const sqft = 1300 + (seed % 1400); // 1300–2700
-    const sq   = Math.round(sqft / 100);
-
-    const rate = RATES[D.rooftype] || RATES.unknown;
-    const ratePerSq = rate.mid;
-    let total = sq * ratePerSq;
-    if (D.ins) total += ADDON_PRICES.ins;
-    if (D.gut) total += ADDON_PRICES.gut;
-    if (D.sid) total += ADDON_PRICES.sid;
-
-    const low  = Math.round(sq * rate.low  + (D.ins?ADDON_PRICES.ins:0) + (D.gut?ADDON_PRICES.gut:0));
-    const high = Math.round(sq * rate.high + (D.ins?ADDON_PRICES.ins:0) + (D.gut?ADDON_PRICES.gut:0));
-
-    const typeLabels = { shingle:'Shingle (Asphalt)', tpo:'TPO Flat', metal:'Metal', unknown:'To be confirmed' };
-
-    document.getElementById('r-price').textContent   = '$' + total.toLocaleString();
-    document.getElementById('r-range').textContent   = 'Estimated range: $' + low.toLocaleString() + ' – $' + high.toLocaleString();
-    document.getElementById('r-address').textContent = D.addr + ', ' + D.city + ' ' + D.zip;
-    document.getElementById('r-sqft').textContent    = sqft.toLocaleString() + ' sq ft';
-    document.getElementById('r-sq').textContent      = sq + ' roofing squares';
-    document.getElementById('r-type').textContent    = typeLabels[D.rooftype];
-    document.getElementById('r-phone').textContent   = D.phone;
-    document.getElementById('r-email-out').textContent = D.email;
-
-    const addons = [D.ins&&'Attic insulation', D.gut&&'Gutters', D.sid&&'Siding'].filter(Boolean);
-    if (addons.length) {
-      document.getElementById('r-addon-row').style.display = 'flex';
-      document.getElementById('r-addons').textContent = addons.join(', ');
-    }
-    if (D.fin) document.getElementById('r-fin-row').style.display = 'flex';
-
-    // Send notification email to owner via FormSubmit
-    sendNotification(total, sqft, sq, low, high);
-
-    showCard('card3');
-  }
-
-  // ── Send notification to owner ───────────────────────────
-  function sendNotification(total, sqft, sq, low, high) {
-    const typeLabels = { shingle:'Shingle (Asphalt)', tpo:'TPO Flat', metal:'Metal', unknown:'To be confirmed' };
-    const reasonLabels = {
-      replace:'Full replacement', repair:'Repair/leak', storm:'Storm/insurance',
-      inspect:'Inspection only', new:'New construction'
-    };
-    const addons = [D.ins&&'Attic insulation', D.gut&&'Gutters', D.sid&&'Siding', D.fin&&'Financing'].filter(Boolean);
-
-    const body = {
-      _subject: '🏠 New Roof Quote Request — ' + D.name + ' (' + D.city + ')',
-      _captcha: 'false',
-      _template: 'table',
-      Name:      D.name,
-      Phone:     D.phone,
-      Email:     D.email,
-      Address:   D.addr + ', ' + D.city + ', ' + D.state + ' ' + D.zip,
-      'Roof Type':    typeLabels[D.rooftype] || D.rooftype,
-      'Roof Age':     D.age,
-      Stories:        D.stories,
-      Reason:         reasonLabels[D.reason] || D.reason,
-      'Add-ons':      addons.length ? addons.join(', ') : 'None',
-      'Est. Sq Ft':   sqft.toLocaleString(),
-      'Roof Squares': sq,
-      'Est. Quote':   '$' + total.toLocaleString() + '  (range: $' + low.toLocaleString() + '–$' + high.toLocaleString() + ')',
-      Notes:          D.notes || '—',
-      Submitted:      new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }) + ' CST'
-    };
-
-    fetch(FORMSUBMIT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(body)
-    }).catch(() => {}); // silent fail — estimate still shows
-  }
-
-  // ── Helpers ──────────────────────────────────────────────
-  function toggle(el) {
-    el.classList.toggle('checked');
-    el.querySelector('input').checked = el.classList.contains('checked');
-    if (el.querySelector('.check-box')) {
-      el.querySelector('.check-box').textContent = el.classList.contains('checked') ? '✓' : '';
-    }
-  }
-
-  function backTo(n) {
-    setStep(n); showCard('card' + n);
-  }
-
-  function callUs() {
-    window.open('tel:+18328458465');
-  }
-
-  function restart() {
-    D = {};
-    document.querySelectorAll('input[type=text], input[type=email], input[type=tel], textarea')
-      .forEach(el => el.value = '');
-    document.querySelectorAll('.check-item').forEach(el => {
-      el.classList.remove('checked');
-      el.querySelector('input').checked = false;
-      if (el.querySelector('.check-box')) el.querySelector('.check-box').textContent = '';
-    });
-    document.getElementById('r-addon-row').style.display = 'none';
-    document.getElementById('r-fin-row').style.display   = 'none';
-    setStep(1); showCard('card1');
-  }
-</script>
+<div class="quote-section" id="quote">
+  <div class="quote-card">
+    <div class="quote-left"><h2>Free Roof Installation Quote</h2><p>Enter your Zip Code for a free estimate!</p></div>
+    <div class="quote-right">
+      <label for="zip">Zip Code</label>
+      <input type="text" id="zip" placeholder="e.g. 77001" maxlength="10"/>
+      <button class="btn-estimate">GET ESTIMATE</button>
+      <p style="text-align:center;font-size:12px;color:#888">Enter details in under 2 minutes</p>
+    </div>
+  </div>
+</div>
+<section class="services-strip" id="services">
+  <h2>Our Roofing Services</h2>
+  <div class="services-grid">
+    <div class="svc-card"><span class="icon">H</span><h3>Roof Installation</h3></div>
+    <div class="svc-card"><span class="icon">R</span><h3>Roof Replacement</h3></div>
+    <div class="svc-card"><span class="icon">I</span><h3>Roof Inspection</h3></div>
+    <div class="svc-card"><span class="icon">F</span><h3>Roof Repair</h3></div>
+    <div class="svc-card"><span class="icon">E</span><h3>Emergency Service</h3></div>
+  </div>
+</section>
+<div class="trust-bar">
+  <div class="trust-item"><div class="t-num">500+</div><div class="t-label">Projects Completed</div></div>
+  <div class="trust-item"><div class="t-num">15+</div><div class="t-label">Years Experience</div></div>
+  <div class="trust-item"><div class="t-num">10yr</div><div class="t-label">Workmanship Warranty</div></div>
+  <div class="trust-item"><div class="t-num">100%</div><div class="t-label">Licensed &amp; Insured</div></div>
+</div>
+<footer id="contact">
+  <span>2026 MJ Roof Master. All rights reserved.</span>
+  <div class="footer-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="tel:8328458465">(832) 845-8465</a></div>
+</footer>
 </body>
 </html>
